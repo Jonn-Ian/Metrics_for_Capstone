@@ -1,0 +1,6 @@
+Metric,Value
+Average Similarity (%),98.0
+Average MAE (°),0.2024
+Average RMSE (°),0.2607
+Average Landmark Distance (mm),37.3243
+Number of Frames Processed,25.0

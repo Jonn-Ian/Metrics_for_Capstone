@@ -1,0 +1,24 @@
+before pip installing the r.text
+============================================
+
+/*** step 1 ***/
+
+the python version should be 3.10.0
+
+============================================
+
+/*** step 2 ***/
+
+setup git
+put this on terminal
+
+for windows:
+winget install --id Git.Git -e --source winget
+
+============================================
+
+/*** step 3 ***/
+
+install the requirements first
+
+pip install -r r.txt
