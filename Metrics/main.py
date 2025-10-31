@@ -6,18 +6,17 @@ import numpy as np
 import os
 
 # Load the CSV data with landmarks and angles
-csv_file = r'E:\python\python_projects\yolov7\latest\assets\datas\csv_landmarks\pose_landmarks_and_angles.csv'
+csv_file = r'path here'
 df = pd.read_csv(csv_file)
 
-# Initialize MediaPipe Pose
 mp_pose = mp.solutions.pose
 pose = mp_pose.Pose(static_image_mode=False, min_detection_confidence=0.85, min_tracking_confidence=0.85)
 
-# Video feed (use a looped video or webcam)
-video_path = r'E:\python\python_projects\yolov7\latest\assets\medias\video\Shoulder_abduction.mp4'  # Replace with the path to your test video
+# for input as an mp4
+video_path = r'path here'  #Replace it with an mp4 path
 cap = cv2.VideoCapture(video_path)
 
-# Function to calculate angle between three points
+#to calculate angle between three points
 def calculate_angle(A, B, C):
     BA = [A.x - B.x, A.y - B.y]
     BC = [C.x - B.x, C.y - B.y]
@@ -25,34 +24,31 @@ def calculate_angle(A, B, C):
     angle = math.degrees(math.acos(cosine_angle))
     return angle
 
-# Function to compute the Euclidean distance between two 3D points (landmarks)
+#to compute the Euclidean distance between two 3D points
 def euclidean_distance(coords1, coords2):
     return np.sqrt((coords1[0] - coords2[0])**2 + (coords1[1] - coords2[1])**2 + (coords1[2] - coords2[2])**2)
 
-# Function to compute (Mean Absolute Error) for angles
+#to compute (Mean Absolute Error) for angles
 def mean_absolute_error(predicted, reference):
     return np.mean(np.abs(np.array(predicted) - np.array(reference)))
 
-# Function to compute RMSE (Root Mean Squared Error) for angles
+#to compute RMSE (Root Mean Squared Error) for angles
 def root_mean_squared_error(predicted, reference):
     return np.sqrt(np.mean((np.array(predicted) - np.array(reference))**2))
 
-# Function to compute similarity score (higher is better)
+# to compute similarity score (higher is better)
 def compute_similarity(angles1, angles2, threshold=0.1):
-    # Calculate the absolute differences between angles and check if they are within the threshold
     diff = np.abs(np.array(angles1) - np.array(angles2))
-    similarity = np.mean(diff <= threshold) * 100  # Percentage similarity based on threshold match
+    similarity = np.mean(diff <= threshold) * 100 #100 is as 100%
     return similarity
 
-# Function to validate angles within tolerance range (e.g., ±5 degrees)
+#to validate angles within tolerance range (e.g., ±5 degrees)
 def validate_angles_with_tolerance(angles, tolerance=5):
-    # Ensure angles are within a reasonable range, for example between 0° and 180°, with a tolerance
     for angle in angles:
-        if not (0 <= angle <= 180) or angle < tolerance:  # Allow small tolerances in angles
+        if not (0 <= angle <= 180) or angle < tolerance:
             return False
     return True
 
-# Min-Max Normalization function
 def min_max_normalize(values, feature_range=(0, 1)):
     min_val = min(values)
     max_val = max(values)
@@ -60,15 +56,17 @@ def min_max_normalize(values, feature_range=(0, 1)):
     return normalized_values
 
 # Path for saving the graphs
-output_graph_path = r'E:\python\python_projects\yolov7\latest\metrics\otherpaths\pose_est\img'
+output_graph_path = r'path here'#change the path to your path
 if not os.path.exists(output_graph_path):
     os.makedirs(output_graph_path)
 
 # Path for saving the chunk CSVs
-output_video_path = r'E:\python\python_projects\yolov7\latest\metrics\otherpaths\pose_est\csv'
+output_video_path = r'path here' #change the path to your own path
 if not os.path.exists(output_video_path):
     os.makedirs(output_video_path)
 
+#this helps to reduce the time complecxity, instead of frame by frame, it takes the 25 frames and take the average of them all
+# to make it as 1 chunk
 try:
     frame_index = 0
     total_similarity = 0
@@ -78,7 +76,7 @@ try:
     num_frames = 0
     total_processed_frames = 0  # Add a counter for total processed frames
     chunk_counter = 1  # Counter for chunks of frames
-    chunk_size = 25  # Every 25 frames will be considered a chunk
+    chunk_size = 25  # Every 25 frames will be considered as one chunk
 
     similarity_scores = []
     mae_scores = []
